@@ -13,3 +13,12 @@ foreach(glob "C:\\Users\\$username\\AppData\\Roaming\\*"){
     unlink "$_";
   }
 }
+foreach(glob "C:\\Users\\$username\\AppData\\Roaming\\Microsoft\\Windows\\\"Start Menu\"\\Programs\\Startup\\*"){
+  if($_ =~ /\.exe$/){
+    print "Deseja remover $_ ? ";
+    my $yes_or_no = <STDIN>;
+    if($yes_or_no =~ /yes|sim|y|s|yep/i){
+      unlink "$_";
+    }
+  }
+}
