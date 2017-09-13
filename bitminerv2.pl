@@ -119,7 +119,7 @@ while(1){
 EXE
 		  close(EXECUTABLE);
 		  system("pp -o $executable_name executable.pl");
-		  #unlink "executable.pl";
+		  unlink "executable.pl";
 		  print color("RED"),"\n[*]",color("reset"), " Sucesso !\n";
 		}
 	  }
