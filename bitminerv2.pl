@@ -60,6 +60,7 @@ if($website){
 		    print color("RED"),"\n[*]",color("reset"), " Nome do malware indefinido !\n";
 		  }
 		  else{
+		    $executable_name =~ s/\s/_/g;
 		    $executable_name .= ".exe" if $executable_name !~ /\.exe$/;
 		    print color("RED"),"\n[*]",color("reset"), " Criando $executable_name...\n";
 		  }
